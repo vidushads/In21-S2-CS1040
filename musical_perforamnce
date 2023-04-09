@@ -1,0 +1,225 @@
+import java.util.ArrayList;
+
+class Performance {
+
+    // Instance variable to store a list of backup performers
+	private ArrayList<IBackup> backups;
+
+    // Instance variables to store information about the performance
+    public String main_artist_name;
+    public String name;
+    private String[] track_list;
+    private String venue;
+    private int year;
+
+    // Constructor to initialize a new Performance object with the given name, venue, year, and main artist name
+    Performance(String name, String venue, int year, String main_artist_name) {
+        this.name = name;
+        this.year = year;
+        this.venue = venue;
+        this.main_artist_name = main_artist_name;
+        backups = new ArrayList<IBackup>(); // initialize the backups ArrayList
+    }
+
+    // Method to add a new backup singer to the performance
+    public void addBackupSinger(String name) {
+        BackupSinger backupSinger = new BackupSinger(name);
+        backups.add(backupSinger);
+        System.out.println("This is the method addBackupSinger in the class Performance");
+    }
+
+    // Method to add a new backup dancer to the performance
+    public void addBackupDancer(String name) {
+        BackupDancer backupDancer = new BackupDancer(name);
+        backups.add(backupDancer);
+        System.out.println("This is the method addBackupDancer in the class Performance");
+    }
+
+    // Method to make all backup performers perform
+    public void backupsPerform() {
+        System.out.println("This is the method backupsPerform in the class Performance");
+        for (IBackup backup : backups) {
+            backup.backup();
+        }
+    }
+}
+
+class LivePerformance extends Performance {
+
+    // Constructor to initialize a new LivePerformance object with the given name, venue, year, and main artist name
+    LivePerformance(String name, String venue, int year, String main_artist_name) {
+        super(name, venue, year, main_artist_name); // call the constructor of the superclass (Performance)
+
+        // Print a welcome message
+        System.out.println("Welcome to the live performance "+name+" by "+main_artist_name);
+
+        // Create a new MainArtist object and make it sing and interact with the audience
+        MainArtist main_artist = new MainArtist(main_artist_name);
+        main_artist.sing();
+        main_artist.interaction();
+
+        // Make all backup performers perform
+        backupsPerform();
+    }
+}
+
+class StudioPerformance extends Performance {
+
+    // Constructor to initialize a new StudioPerformance object with the given name, venue, year, and main artist name
+    StudioPerformance(String name, String venue, int year, String main_artist_name) {
+        super(name, venue, year, main_artist_name); // call the constructor of the superclass (Performance)
+
+        // Print a welcome message
+        System.out.println("Welcome to the studio performance "+name+" by "+main_artist_name);
+
+        // Create a new MainArtist object and make it sing
+        MainArtist main_artist = new MainArtist(main_artist_name);
+        main_artist.sing();
+
+        // Make all backup performers perform
+        backupsPerform();
+    }
+
+    // Method to perform audio processing
+    public void audioProcessing(){
+        System.out.println("Audio processing is available");
+        System.out.println("This is the method audioProcessing in the class StudioPerformance");
+    }
+}
+
+class MainArtist {
+
+    private String name;
+
+    // Constructor to initialize a new MainArtist object with the given name
+    public MainArtist(String name) {
+        this.name = name;
+    }
+
+    // Method to make the main artist sing
+    public void sing() {
+        System.out.println("Main artist " + name + " is singing.");
+        System.out.println("This is the method sing in the class MainArtist");
+    }
+
+    // Method to make the main artist interact with the audience
+    public void interaction() {
+        System.out.println("Main artist " + name + " is interacting with the audience.");
+        System.out.println("This is the method interaction in the class MainArtist");
+    }
+}
+
+
+interface IBackup {
+
+    // Method signature for the backup method
+    void backup();
+}
+
+class BackupDancer implements IBackup {
+
+    private String name;
+
+    // Constructor to initialize a new BackupDancer object with the given name
+    public BackupDancer(String name) {
+        this.name = name;
+    }
+
+    // Method to backup dancer to dance
+    @Override
+    public void backup(){
+        System.out.println("Backup dancer "+name+" is dancing");
+        System.out.println("This is the method backup in the class BackupDancer");
+    }
+
+}
+
+class BackupSinger implements IBackup {
+    private String name;
+
+    // Constructor to initialize a new BackupSinger object with the given name
+    public BackupSinger(String name) {
+        this.name = name;
+    }
+
+    // Method to backup singer to sing
+    @Override
+    public void backup() {
+        System.out.println("Backup singer " +name+ " is singing.");
+        System.out.println("This is the method backup in the class BackupSinger");
+
+    }
+}
+
+
+class TrackList {
+    // Instance variable to store a list of tracks
+    private ArrayList<Track> tracks;
+
+    // Constructor to initialize the instance variable
+    public TrackList() {
+        tracks = new ArrayList<Track>();
+    }
+
+    // Method to add a track to the list
+    public void addTrack(String name, String duration) {
+        Track track = new Track(name, duration);
+        tracks.add(track);
+        System.out.println("This is the method addTrack in the class TrackList");
+    }
+
+    // Method to remove a track from the list by its name
+    public void removeTrack(String name) {
+        System.out.println("This is the method removeTrack in the class TrackList");
+        for (int i = 0; i < tracks.size(); i++) {
+            if (tracks.get(i).getName().equals(name)) {
+                tracks.remove(i);
+                break;
+            }
+        }
+    }
+}
+
+class Track {
+    // Instance variables to store information about the track
+    private String name;
+    private String duration;
+
+    // Constructor to initialize a new Track object with the given name and duration
+    public Track(String name, String duration) {
+        this.name = name;
+        this.duration = duration;
+    }
+
+    // Getter method for the name of the track
+    public String getName() {
+        return name;
+    }
+
+    // Getter method for the duration of the track
+    public String getDuration() {
+        return duration;
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+
+        LivePerformance live_performance = new LivePerformance("Eras Tour", "Glendale", 2023, "Taylor Swift");
+
+        live_performance.addBackupSinger("Jeslyn");
+        live_performance.addBackupSinger("Melanie");
+        live_performance.addBackupDancer("Stephanie");
+        live_performance.addBackupDancer("Jake");
+        live_performance.backupsPerform();
+
+        TrackList trackList = new TrackList();
+        trackList.addTrack("Lavender Haze", "Not given");
+        trackList.addTrack( "All Too Well", "Not given");
+        trackList.addTrack( "the lakes", "Not given");
+        trackList.addTrack( "The Man", "Not given");
+        trackList.addTrack( "Love Story", "Not given");
+
+    }
+}
