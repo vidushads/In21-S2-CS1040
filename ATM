@@ -1,0 +1,307 @@
+import java.util.*;
+
+class Client {
+    // Instance variables
+    private List<Account> accounts; // List of accounts associated with the client
+    private String address; // Address of the client
+    private int age; // Age of the client
+    private String gender; // Gender of the client
+    private int id; // Unique identifier for the client
+    private String name; // Name of the client
+    private String nationality; // Nationality of the client
+    private String occupation; // Occupation of the client
+    private int pin; // Personal Identification Number for accessing the ATM
+
+    // Constructor
+    public Client(int age, String address, String gender, int id, String name, String nationality, String occupation,  int pin) {
+        this.accounts = new ArrayList<>();
+        // set the age of the client
+        this.age = age;
+
+        // set the address of the client
+        this.address = address;
+
+        // set the gender of the client
+        this.gender = gender;
+
+        // set the id of the client
+        this.id = id;
+
+        // set the name of the client
+        this.name = name;
+
+        // set the nationality of the client
+        this.nationality = nationality;
+
+        // set the occupation of the client
+        this.occupation = occupation;
+
+        // set the pin of the client
+        this.pin = pin;
+    }
+
+    public int getPin(){
+        return pin;
+    }
+
+    // Method to get the list of accounts associated with the client
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    // set the client's list of accounts
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+}
+import java.util.*;
+
+// Class representing a bank account
+class Account {
+    // Instance variables
+    private int accountId; // Unique identifier for the account
+    private double balance; // Current balance of the account
+    private String branch; // Branch associated with the account
+    private String currency; // Currency of the account
+    private List<Loan> loans; // List of loans associated with the account
+    private double interest; // Interest rate for the account
+
+    // Constructor to initialize an account with an ID, currency, branch and balance
+    public Account(int accountId, String currency, String branch, double balance){
+        this.accountId = accountId;
+        this.balance = balance;
+        this.branch = branch;
+        this.currency = currency;
+        this.loans = new ArrayList<>();
+    }
+
+    // Method to get the list of loans associated with the account
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    // Method to set the interest rate for the account
+    public void getInterest(double interest){
+        this.interest = interest;
+    }
+
+    // Method to withdraw an amount from the account. Returns true if successful and false if not enough funds.
+    public boolean withdraw(double amount) {
+        if (amount > balance) {
+            return false;
+        }
+        balance -= amount;
+        return true;
+    }
+
+    // Method to get the ID of the account
+    public int getAccountId(){
+        return accountId;
+    }
+
+    // Method to get the current balance of the account
+    public double getBalance() {
+        return balance;
+    }
+
+    // Method to deposit an amount into the account
+    public void deposit(double amount) {
+        balance += amount;
+    }
+}
+// Class representing a bank transaction
+class Transaction {
+    // Instance variables
+    private int accountId; // ID of the account associated with the transaction
+    private String date; // Date of the transaction
+    private String status; // Status of the transaction
+    private int transactionId; // Unique identifier for the transaction
+
+    // Constructor to initialize a transaction with an ID, associated account ID, date and status
+    public Transaction(int accountId, String date, String status, int transactionId){
+        this.accountId = accountId;
+        this.date = date;
+        this.status = status;
+        this.transactionId = transactionId;
+    }
+}
+import java.util.*;
+
+class ATM {
+    private Client client; // client using the ATM
+    private Account selectedAccount; // account selected by the client
+    /**
+     * Constructor for ATM class
+     * client using the ATM
+     */
+    public ATM(Client client) {
+        this.client = client;
+    }
+
+    /**
+     * Method to get the pin from the user
+     * pin entered by the user
+     */
+
+    public int enterPin() {
+        System.out.println("Welcome!");
+        System.out.println("Please enter the pin: ");
+        Scanner scanner = new Scanner(System.in);
+        int pin = Integer.parseInt(scanner.nextLine());
+        return pin;
+    }
+
+    /**
+     * Method to display the main menu and get the user's choice
+     */
+    public void mainMenu() {
+        System.out.println("Main Menu");
+        System.out.println("1. View Balance");
+        System.out.println("2. Withdraw money");
+        System.out.println("3. Deposit money");
+        System.out.println("4. Exit ");
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+
+
+        switch (choice) {
+            case 1:
+                viewBalance(); // view the balance of the selected account
+                break;
+            case 2:
+                withdrawMoney(); // withdraw money from the selected account
+                break;
+            case 3:
+                depositMoney(); // deposit money into the selected account
+                break;
+            case 4:
+                return; // exit the main menu
+            default:
+                System.out.println("Invalid selection. Please try again.");
+        }
+    }
+
+    /**
+     * Method to view the balance of the selected account
+     */
+    private void viewBalance() {
+        // display the balance of the selected account
+        System.out.println("Your balance is: " + selectedAccount.getBalance());
+    }
+
+    /**
+     * Method to deposit money into the selected account
+     */
+    private void depositMoney() {
+        // prompt the user to enter the amount to deposit
+        System.out.print("Enter the amount to deposit: ");
+        Scanner scanner = new Scanner(System.in);
+        double amount = scanner.nextDouble();
+
+        // deposit the specified amount into the selected account
+        selectedAccount.deposit(amount);
+
+        // display the new balance
+        System.out.println("Deposit successful. Your new balance is: " + selectedAccount.getBalance());
+    }
+
+    /**
+     * Method to withdraw money from the selected account
+     */
+    private void withdrawMoney() {
+        // prompt the user to enter the amount to withdraw
+        System.out.print("Enter the amount to withdraw: ");
+        Scanner scanner = new Scanner(System.in);
+        double amount = scanner.nextDouble();
+
+        // attempt to withdraw the specified amount from the selected account
+        if (selectedAccount.withdraw(amount)) {
+            // if successful, display the remaining balance
+            System.out.println("Withdrawal successful. Your remaining balance is: " + selectedAccount.getBalance());
+        } else {
+            // if unsuccessful, display an error message
+            System.out.println("Insufficient funds.");
+        }
+    }
+
+
+    /**
+     * Method to allow the user to select an account
+     */
+    public void accountSelection() {
+        // create a scanner object to read user input
+        Scanner scanner = new Scanner(System.in);
+
+        // prompt the user to select an account
+        System.out.println("Please select an account:");
+
+        // get the list of accounts associated with the client
+        List<Account> accounts = client.getAccounts();
+
+        // display the list of accounts
+        for (int i = 0; i < accounts.size(); i++) {
+            System.out.println(i + 1 + ": Account " + accounts.get(i).getAccountId());
+        }
+
+        // get the user's selection
+        int selection;
+        do {
+            System.out.println("Please enter a valid selection (1-" + accounts.size() + "):");
+            selection = scanner.nextInt();
+        } while (selection < 1 || selection > accounts.size());
+
+        // set the selected account based on the user's selection
+        selectedAccount = accounts.get(selection - 1);
+    }
+
+    // Method to verify if the entered PIN is correct
+    public boolean pinVerification(int pin) {
+        return client.getPin() == pin;
+    }
+
+    public void start(){
+        int pin = enterPin();
+        if(pinVerification(pin)){
+            accountSelection();
+            mainMenu();
+        }
+        else{
+            System.out.println("wrong pin");
+        }
+    }
+}
+// Class representing a loan
+class Loan {
+    // Instance variables
+    private double amount; // loan amount
+    private double interest; // interest rate
+    private int duration; // loan duration in months
+    private String paymentMethod; // method of payment
+
+    /**
+     * Constructor for Loan class
+     * @param amount loan amount
+     * @param interest interest rate
+     * @param duration loan duration in months
+     * @param paymentMethod method of payment
+     */
+    public Loan(double amount, double interest, int duration, String paymentMethod) {
+        this.amount = amount;
+        this.interest = interest;
+        this.duration = duration;
+        this.paymentMethod = paymentMethod;
+    }
+}
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Client A = new Client(25, "New York", "male", 2000, "Sam", "American", "doctor", 123);
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(new Account(12345, "USD", "Main Branch", 1000.0));
+        accounts.add(new Account(67890, "USD", "Main Branch", 2000.0));
+        A.setAccounts(accounts);
+        System.out.println();
+        ATM a = new ATM(A);
+        a.start();
+    }
+}
